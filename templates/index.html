@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="sign">
+<div class="container">
+    <h1>Sign Up</h1>
+    <form id="signup-form" method="POST" action="/">
+        {{ form.csrf_token }}
+        {{ form.Username(placeholder="Username", title="Only use uppercase letters, lowercase letters, numbers and underscore. Username must be between 5 to 16 characters") }}
+        <br/>
+        {{ form.First_Name(placeholder="First Name", title="Only use uppercase letters and lowercase letters. Name must be atleast 3 characters.") }}
+        <br/>
+        {{ form.Last_Name(placeholder="Last Name", title="Only use uppercase letters and lowercase letters. Name must be atleast 3 characters.") }}
+        <br/>
+        {{ form.Phone(type="tel", placeholder="Mobile Number", title="Enter a 10-digit mobile number without spaces or special characters.") }}
+        <br/>
+        {{ form.Email(placeholder="Email", title="Enter a valid email address.", required="required") }}
+        <br/>
+        {{ form.Role(title="Enter role: Organizer or Attendee") }}
+        <br/> 
+        {{ form.Password(placeholder="Password", title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters") }}
+        <br/>
+        {{ form.Confirm_Password(placeholder="Confirm Password", title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters") }}
+        <br/>
+        {{ form.Submit() }}
+    </form>
+    <div class="switch-signup-signin">
+        {% if message %}
+        <h3 type="message">{{ message }}</h3>
+        {% endif %}
+        {% if error %}
+        <h3 type="error">{{ error }}</h3>
+        {% endif %}
+        <span>Already have an account?</span>
+        <a href="{{ url_for('signin') }}" id="signin-link">Sign In</a>
+    </div>
+</div>
+</body>
+</html>
