@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Management System</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles.css')}}"
+    />
+    <link href="static/css/all.css" rel="stylesheet"/>
+    {% block html_head %}{% endblock %}
+  </head>
+  <body class="home">
+
+    <header class="headerhome">
+      <h1> Event Management System</h1>
+      {% block header %}{% endblock %}
+    </header> 
+    <ul class="nav">
+      <li class="navcon"><a href="{{ url_for('home') }}"> Home</a></li> 
+      {%if session['role']=='organizer'%}
+      <li class="navcon"><a href="{{ url_for('createevents') }}"> Create Event</a></li> 
+      <li class="navcon"><a href="{{ url_for('listownedevents') }}"> Manage Events</a></li>
+      {%endif%}
+      <li class="navcon"><a href="{{ url_for('events') }}"> Events </a></li>
+      <li class="navcon"><a href="{{ url_for('registeredevents') }}"> Registered Events</a></li>
+      <div class="dropdown">
+        <button class="dropbtn"> {{session['username']}}
+         
+        </button>
+        <div class="dropdown-content">
+          <div class = "proper-drop">
+          <a class="proper-drop" href="{{ url_for('logout') }}"> Logout</a>
+          {%if session['role']=='organizer'%}
+          <a class="proper-drop" href="{{ url_for('attendence') }}"> Attendence</a>
+          {%endif%}
+          <div>
+        </div>
+      </div> 
+      </ul>
+    <div id="home">
+      
+    </div>
+
+    <div id="body">
+      {% block body %}{% endblock %}
+    </div>
+
+    
+    <footer>
+      {% block footer %}{% endblock %}
+      <p>&copy; 2024 Event Management System. All rights reserved (Not really, Please don't sue us).</p>
+    </footer>
+  </body>
+</html>
