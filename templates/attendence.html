@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block html_head%}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance</title>
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+{% endblock %}
+</head>
+<body class="home">
+{% block body %}
+<form id="qrForm" method="post" action="{{ url_for('process_qr_data') }}">
+  {{ form.csrf_token }}
+  {{ form.QR }}
+  {{ form.Send }}
+</form>
+<div class="container">
+  <br>
+  <h1>QR Code</h1>
+  <video id="qrVideo"></video>
+  <select id="cameraSelect"></select>
+  {% if message %}
+  <h3 type="message">{{ message }}</h3>
+  {% endif %}
+  {% if error %}
+  <h3 type="error">{{ error }}</h3>
+  {% endif %}
+</div>
+
+<script>
+  let scanner = new Instascan.Scanner({ video: document.getElementById('qrVideo') });
+  scanner.addListener('scan', function (content) {
+    document.getElementById('QR').value = content;
+    document.getElementById('sendButton').click();
+  });
+  Instascan.Camera.getCameras().then(function (cameras) {
+    let select = document.getElementById('cameraSelect');
+    cameras.forEach(function(camera, i) {
+      let opt = document.createElement('option');
+      opt.value = i;
+      opt.innerHTML = camera.name || 'Camera ' + (i+1);
+      select.appendChild(opt);
+    });
+    select.onchange = function() {
+      scanner.start(cameras[select.value]);
+    }
+    if (cameras.length > 0) {
+      scanner.start(cameras[0]);
+    } else {
+      console.error('No cameras found.');
+    }
+  }).catch(function (e) {
+    console.error(e);
+  });
+</script>
+{% endblock %}
+</body>
+</html>
