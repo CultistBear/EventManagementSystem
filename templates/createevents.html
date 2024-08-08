@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<body class="home">
+{% block body %}
+<div class="overlay" id ="overlay"></div>
+<div class="container">
+  <form id="eventForm" action="/createevents" method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    {{ form.Index }}
+    {{ form.EventName.label }}
+    {{ form.EventName }}
+    {{ form.EventLocation.label }}
+    <button type="button" onclick="showMap()">Pick Location</button>
+    <input type="hidden" id="EventLocation" name="EventLocation">
+    {{ form.EventStartDate.label }}
+    {{ form.EventStartDate }}
+    {{ form.EventStartTime.label }}
+    {{ form.EventStartTime }}
+    {{ form.EventEndDate.label }}
+    {{ form.EventEndDate }}
+    {{ form.EventEndTime.label }}
+    {{ form.EventEndTime }}
+    {{ form.EventCategory.label }}
+    {{ form.EventCategory }}
+    {{ form.EventDescription.label }}
+    {{ form.EventDescription }}
+    {{ form.EventSeats.label }}
+    {{ form.EventSeats }}
+    {{ form.EventBanner.label }}
+    {{ form.EventBanner }}
+    {{ form.Submit }}
+    {% if message %}
+        <h3 type="message">{{message}}</h3>
+        {% endif %} {% if error %}
+        <h3 type="error">{{error}}</h3>
+        {% endif %}
+  </form>
+</div>
+
+<!-- Modal for map -->
+<div id="mapModal" class="mapModal">
+  <div class="modal-content">
+    <div class="close" onclick="closeMap()">&times;</div>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="map" style="height: 400px; width: 100%;"></div>
+  </div>
+</div>
+
+<script>
+var map;
+var marker;
+var mapInitialized = false; 
+
+window.addEventListener("click", function (event) {
+  var formPopup = document.getElementById("mapModal");
+  var overlay = document.getElementById("overlay");
+  if (event.target == overlay) {
+      formPopup.style.display = "none";
+      overlay.style.display = "none";
+      overlay.style.opacity = "0";
+      document.body.style.overflow = ""; // Restore scrolling
+  }
+});
+
+function showMap() {
+  document.getElementById('mapModal').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
+  if (!mapInitialized) {
+    initMap();
+    mapInitialized = true;
+  }
+}
+
+function closeMap() {
+  document.getElementById('mapModal').style.display = 'none';
+}
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 8
+  });
+
+  var input = document.getElementById('pac-input');
+  var searchBox = new google.maps.places.SearchBox(input);
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  map.addListener('bounds_changed', function() {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  marker = new google.maps.Marker({
+    map: map,
+    draggable: true
+  });
+
+  searchBox.addListener('places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+
+      marker.setPosition(place.geometry.location);
+      document.getElementById('EventLocation').value = place.geometry.location.lat() + ',' + place.geometry.location.lng();
+
+      if (place.geometry.viewport) {
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+  });
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{maps_api_key}}&callback=initMap&libraries=places" async defer></script>
+
+<link
+      rel="stylesheet"  
+      href="{{ url_for('static', filename='map.css') }}"
+    />
+
+{% endblock body %}
+</body>
+</html>

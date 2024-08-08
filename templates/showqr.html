@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <body class="home">
+    {%block body%} 
+    <div id="appointments">
+    <div class="container">
+    </br>
+        <img src="data:image/png;base64,{{ qr }}" alt="QR Code">
+        <form>
+          Attendee Information:
+          <br/>
+          <br/>
+          {{ user_form.First_Name.label }}
+          {{ user_form.First_Name(value = AttendeeInfo[0]['FirstName']) }}
+          <br/>
+          {{ user_form.Last_Name.label }}
+          {{ user_form.Last_Name(value = AttendeeInfo[0]['LastName']) }}
+          <br/>
+          {{ user_form.Phone.label }}
+          {{ user_form.Phone(type="tel", value = AttendeeInfo[0]['PhoneNumber']) }}
+          <br/>
+          {{ user_form.Email.label }}
+          {{ user_form.Email(value = AttendeeInfo[0]['EmailID']) }}
+          <br />
+          <label for="Status">Status</label>
+          <input class="formdata" id="Status" name="Status" type="text" value="{{AttendeeInfo[0]['TicketStatus']}}">
+          </form>
+  </div>
+  <div class="container">
+        <form>
+            <br/>
+            Event Information:
+            <br/>
+          <img src = "{{url_for('static', filename='EventBanner/'+EventInfo[0]['EventBanner'])}}" width = "400" height = "400">
+          <br/>
+          {{ event_form.EventName.label }}
+          {{event_form.EventName(value = EventInfo[0]['EventName'])}}
+          <br/>
+          {{ event_form.EventLocation.label }}
+          {{event_form.EventLocation(value = EventInfo[0]['Location'])}}
+          <br/>
+          {{ event_form.EventStart.label }}
+          {{ event_form.EventStart(value = EventInfo[0]['Start']) }}
+          <br/>
+          {{ event_form.EventEnd.label }}
+          {{ event_form.EventEnd(value = EventInfo[0]['End']) }}
+          <br/>
+          {{ event_form.EventCategory.label }}
+          {{ event_form.EventCategory(value = EventInfo[0]['Category'])}}
+          <br/>  
+          Event Description
+            <textarea rows = 10 class = "formdata">{{ EventInfo[0]['Description'] }}</textarea>
+        </form>
+        <br/>
+        </div>
+    </br>
+</div>
+    {%endblock%}
+  </body>
+</html>
