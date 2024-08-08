@@ -1,0 +1,31 @@
+@import "styles.css";
+
+.mapModal {
+    display:none;
+    transition: 0.3s ease-in-out;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .mapModal {
+    display: none;
+    position: fixed;
+    width:50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1f2833;
+    padding: 10px;
+    z-index: 1000;
+  }
