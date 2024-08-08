@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <body class="home">
+    {% block body %} 
+    <div id="appointments">
+    <br>
+    <!-- Background overlay for the popup -->
+      <div class="container">
+        <form method="post">
+            {{form.csrf_token}}
+            {{form.Index(value=event_list[0]['Index'])}}
+            <img src = "{{url_for('static', filename='EventBanner/'+event_list[0]['EventBanner'])}}" width = "400" height = "400">
+            {{ form.EventName.label }}
+            {{form.EventName(value = event_list[0]['EventName'])}}
+            {{ form.EventLocation.label }}
+            {{form.EventLocation(value = event_list[0]['Location'][0])}}
+            {{ form.EventStart.label }}
+            {{ form.EventStart(value = event_list[0]['Start']) }}
+            {{ form.EventEnd.label }}
+            {{ form.EventEnd(value = event_list[0]['End']) }}
+            {{ form.EventCategory.label }}
+            {{ form.EventCategory(value = event_list[0]['Category'])}}
+            Event Description
+            <textarea rows = 10 class = "formdata" readonly>{{ event_list[0]['Description'] }}</textarea>
+            {{ form.EventSeats.label}}
+            {{ form.EventSeats(value = event_list[0]['Seats'])}}
+            {{ form.Edit(formaction =  url_for('editevent') )}}
+            {{ form.Delete(formaction= url_for('manageevents'))}}
+        </form>
+      </div>
+      <br>
+    </div>
+    {% endblock %}
+  </body>
+</html>

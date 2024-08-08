@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <body class="home">
+    {% block body %} 
+    <div id="appointments">
+    <br>
+    <!-- Background overlay for the popup -->
+      <div class="container">
+        <form method="post" action="{{ url_for('finishregister') }}">
+            {{form.csrf_token}}
+            {{form.Index(value=event['Index'])}}
+            <img src = "{{url_for('static', filename='EventBanner/'+event['EventBanner'])}}" width = "400" height = "400">
+            {{ form.EventName.label }}
+            {{form.EventName(value = event['EventName'])}}
+            {{ form.EventLocation.label }}
+            {{form.EventLocation(value = event['Location'][0])}}
+            {{ form.EventStart.label }}
+            {{ form.EventStart(value = event['Start']) }}
+            {{ form.EventEnd.label }}
+            {{ form.EventEnd(value = event['End']) }}
+            {{ form.EventCategory.label }}
+            {{ form.EventCategory(value = event['Category'])}}
+            Event Description
+            <textarea rows = 10 class = "formdata">{{ event['Description'] }}</textarea>
+            {{ form.EventSeats.label}}
+            {{ form.EventSeats(value = event['Seats'])}}
+            {{ form.CalenderIntegration.label }}
+            {{ form.CalenderIntegration }}
+            {{ form.ConfirmRegister}}
+        </form>
+      </div>
+      <br>
+    </div>
+    {% endblock %}
+  </body>
+</html>
