@@ -17,7 +17,6 @@ class SignUp(FlaskForm):
         "Confirm Password", validators=[InputRequired(), Length(min=8)], render_kw={"class":"formdata"}
     )
     Role = SelectField("Role", choices=[('organizer', 'Organizer'), ('attendee', 'Attendee')], validators=[InputRequired()], render_kw={"class":"formdata"})
-    # done using gpt
     Submit = SubmitField(label=('Submit'), render_kw={"class":"submit"})
 
 class SignIn(FlaskForm):
